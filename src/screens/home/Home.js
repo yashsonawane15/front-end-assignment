@@ -1,9 +1,10 @@
 import React from 'react';
+import UpcomingMovies from '../upcoming/UpcomingMovies';
 
 const Home = () => {
     return (
         <div>
-            <p>Home</p>
+            <UpcomingMovies />
         </div>
     )
 }

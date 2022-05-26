@@ -1,16 +1,40 @@
+@-webkit-keyframes app-logo-spin {
+    to { -webkit-transform: rotateY(360deg); }
+}
+
+@keyframes app-logo-spin {
+    to { transform: rotateY(360deg); }          
+}
+
+@-moz-keyframes app-logo-spin{
+    to { -moz-transform: rotateY(360deg); }
+}
+
 .header {
     background-color: #222;
-    height: 32px;
+    height: 36px;
     padding: 8px 32px 8px 16px;
-    display: grid;
-    grid-template-columns: auto auto;
-}
+  }
 
 .logo {
-    height: 32px;
+    float: left;
+    height: 35px;
+    background: #ff7f7f;
+
+    animation: app-logo-spin infinite 8s linear;
+    -webkit-animation: app-logo-spin 8s infinite linear;
+    -moz-animation: app-logo-spin 8s infinite linear;  
 }
 
-.rightSide {
-    display: grid;
-    justify-content: end;
+.authButton {
+    float: right;
+}
+
+.bookShowButton {
+    float: right;
+    margin-right: 8px;
+}
+
+.warning {
+    color: red;
 }
