@@ -8,10 +8,8 @@ import store from './store';
 import { Provider } from 'react-redux';
 
 ReactDOM.render(
-        <Provider store={store}>
-            <Controller />
-        </Provider>, 
-        document.getElementById('root')
+        <Controller />
+        , document.getElementById('root')
 );
 
 registerServiceWorker();
