@@ -43,7 +43,7 @@ const UpcomingMovies = (props) => {
                 <GridList  cols={5} className={classes.gridListUpcomingMovies}>
                     {
                         movies.map( movie => (
-                            <GridListTile key={movie.id}>
+                            <GridListTile key={"UpcomingMovies" + movie.id}>
                                 <img src={movie.poster_url} className="moviePoster" alt={movie.title} />
                                 <GridListTileBar title={movie.title} />
                             </GridListTile>
