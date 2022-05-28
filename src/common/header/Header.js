@@ -1,5 +1,5 @@
 import React from 'react';
-import { useState } from 'react';
+import { useState} from 'react';
 import './Header.css';
 import Button from '@material-ui/core/Button';
 import logo from '../../assets/logo.svg';
@@ -28,7 +28,7 @@ const customStyles = {
     }
 };
 
-const TabContainer = function (props) {
+const TabContainer = (props) => {
     return (
         <Typography component="div" style={{ padding: 0, textAlign: 'center' }}>
             {props.children}
@@ -215,7 +215,9 @@ const Header = (props) => {
         <div>
             <header className="header">
                 <img src={logo} className="logo" alt="Movies App Logo" />
-                {!loggedIn ?
+                {
+                    !loggedIn ?
+
                     <div className="authButton">
                         <Button variant="contained" color="default" onClick={openModalHandler}>
                             Login
@@ -257,7 +259,7 @@ const Header = (props) => {
 
             </header>
 
-            {/* Login/logout component */}
+            {/* Login/Signup component */}
             <Modal
                 ariaHideApp={false}
                 isOpen={modalIsOpen}

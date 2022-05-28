@@ -1,14 +1,12 @@
-import React from 'react';
-import './Home.css'
-import UpcomingMovies from './UpcomingMovies';
+import React, { useState, useEffect } from 'react';
+
+import './Home.css';
 import Header from '../../common/header/Header';
-import { useState } from 'react';
-import ReleasedMovies from './ReleasedMovies';
+import UpcomingMovies from './UpcomingMovies'
 import { withStyles } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import FormControl from '@material-ui/core/FormControl';
-import { useEffect } from 'react';
 import Typography from '@material-ui/core/Typography';
 import InputLabel from '@material-ui/core/InputLabel';
 import Input from '@material-ui/core/Input';
@@ -19,8 +17,7 @@ import ListItemText from '@material-ui/core/ListItemText';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import axios from 'axios';
-
-
+import ReleasedMovies from './ReleasedMovies';
 
 const styles = theme => ({
     root: {
@@ -52,50 +49,21 @@ const styles = theme => ({
     }
 });
 
-
-
-
 const Home = (props) => {
-    const { classes } = props;
-    
-    const [released, setReleased] = useState([]);
-    const [genres, setGenres] = useState([]);
     const [movieName, setMovieName] = useState("");
+    const [releasedMovies, setReleasedMovies] = useState([]);
+    const [genres, setGenres] = useState([]);
     const [artists, setArtists] = useState([]);
     const [genresList, setGenresList] = useState([]);
     const [artistsList, setArtistsList] = useState([]);
     const [releaseDateStart, setReleaseDateStart] = useState("");
     const [releaseDateEnd, setReleaseDateEnd] = useState("");
 
-
-    const createQuery = () => {
-        let queryString = "?status=RELEASED";
-        if (movieName !== "") {
-            queryString += "&title=" + movieName;
-        }
-        if (genres.length > 0) {
-            queryString += "&genre=" + genres.toString();
-        }
-        if (artists.length > 0) {
-            queryString += "&artists=" + artists.toString();
-        }
-        if (releaseDateStart !== "") {
-            queryString += "&start_date=" + releaseDateStart;
-        }
-        if (releaseDateEnd !== "") {
-            queryString += "&end_date=" + releaseDateEnd;
-        }
-
-        axios.get(props.baseUrl + "movies" + encodeURI(queryString))
-            .then(res => {
-                setReleased(res.data.movies)
-            });
-    }
-
+    {/* Load display data from db on render */}
     useEffect(() => {
         axios.get(props.baseUrl + "movies?status=RELEASED")
             .then(res => {
-                setReleased(res.data.movies)
+                setReleasedMovies(res.data.movies)
 
             });
 
@@ -112,8 +80,7 @@ const Home = (props) => {
             });
     }, []);
 
-
-
+    {/* Form change handlers */}
     const movieNameChangeHandler = event => {
         setMovieName(event.target.value);
     }
@@ -135,6 +102,34 @@ const Home = (props) => {
 
     }
 
+
+    {/* Filter functionality */}
+    const moviesFilterHandler = () => {
+        let queryString = "?status=RELEASED";
+        if (movieName !== "") {
+            queryString += "&title=" + movieName;
+        }
+        if (genres.length > 0) {
+            queryString += "&genre=" + genres.toString();
+        }
+        if (artists.length > 0) {
+            queryString += "&artists=" + artists.toString();
+        }
+        if (releaseDateStart !== "") {
+            queryString += "&start_date=" + releaseDateStart;
+        }
+        if (releaseDateEnd !== "") {
+            queryString += "&end_date=" + releaseDateEnd;
+        }
+
+        axios.get(props.baseUrl + "movies" + encodeURI(queryString))
+            .then(res => {
+                setReleasedMovies(res.data.movies)
+            });
+    }
+
+
+    const { classes } = props;
     return (
         <div>
             <Header baseUrl={props.baseUrl} />
@@ -142,15 +137,11 @@ const Home = (props) => {
             <UpcomingMovies baseUrl={props.baseUrl} />
 
             <div className="flex-container">
-
-                {/* Left side of the screen */}
                 <div className="released">
-                    <ReleasedMovies baseUrl={props.baseUrl} released={released} />
+                    <ReleasedMovies baseUrl={props.baseUrl} releasedMovies={releasedMovies} />
                 </div>
-
-                { /* Right side of the screen */ }
-                <div className="search">
-                <Card>
+                <div className="filter-component">
+                    <Card>
                         <CardContent>
                             <FormControl className={classes.formControl}>
                                 <Typography className={classes.title} color="textSecondary">
@@ -172,12 +163,14 @@ const Home = (props) => {
                                     value={genres}
                                     onChange={genreSelectHandler}
                                 >
-                                    {genresList.map(genre => (
-                                        <MenuItem key={genre.id} value={genre.genre}>
-                                            <Checkbox checked={genres.indexOf(genre.genre) > -1} />
-                                            <ListItemText primary={genre.genre} />
-                                        </MenuItem>
-                                    ))}
+                                    {
+                                        genresList.map(genre => (
+                                            <MenuItem key={genre.id} value={genre.genre}>
+                                                <Checkbox checked={genres.indexOf(genre.genre) > -1} />
+                                                <ListItemText primary={genre.genre} />
+                                            </MenuItem>
+                                        ))
+                                    }
                                 </Select>
                             </FormControl>
 
@@ -190,12 +183,14 @@ const Home = (props) => {
                                     value={artists}
                                     onChange={artistSelectHandler}
                                 >
-                                    {artistsList.map(artist => (
-                                        <MenuItem key={artist.id} value={artist.first_name + " " + artist.last_name}>
-                                            <Checkbox checked={artists.indexOf(artist.first_name + " " + artist.last_name) > -1} />
-                                            <ListItemText primary={artist.first_name + " " + artist.last_name} />
-                                        </MenuItem>
-                                    ))}
+                                    {
+                                        artistsList.map(artist => (
+                                            <MenuItem key={artist.id} value={artist.first_name + " " + artist.last_name}>
+                                                <Checkbox checked={artists.indexOf(artist.first_name + " " + artist.last_name) > -1} />
+                                                <ListItemText primary={artist.first_name + " " + artist.last_name} />
+                                            </MenuItem>
+                                        ))
+                                    }
                                 </Select>
                             </FormControl>
 
@@ -222,84 +217,7 @@ const Home = (props) => {
                             </FormControl>
                             <br /><br />
                             <FormControl className={classes.formControl}>
-                                <Button onClick={() => createQuery()} variant="contained" color="primary">
-                                    APPLY
-                                </Button>
-                            </FormControl>
-                        </CardContent>
-                    </Card><Card>
-                        <CardContent>
-                            <FormControl className={classes.formControl}>
-                                <Typography className={classes.title} color="textSecondary">
-                                    FIND MOVIES BY:
-                                </Typography>
-                            </FormControl>
-
-                            <FormControl className={classes.formControl}>
-                                <InputLabel htmlFor="movieName">Movie Name</InputLabel>
-                                <Input id="movieName" onChange={movieNameChangeHandler} />
-                            </FormControl>
-
-                            <FormControl className={classes.formControl}>
-                                <InputLabel htmlFor="select-multiple-checkbox">Genres</InputLabel>
-                                <Select
-                                    multiple
-                                    input={<Input id="select-multiple-checkbox-genre" />}
-                                    renderValue={selected => selected.join(',')}
-                                    value={genres}
-                                    onChange={genreSelectHandler}
-                                >
-                                    {genresList.map(genre => (
-                                        <MenuItem key={genre.id} value={genre.genre}>
-                                            <Checkbox checked={genres.indexOf(genre.genre) > -1} />
-                                            <ListItemText primary={genre.genre} />
-                                        </MenuItem>
-                                    ))}
-                                </Select>
-                            </FormControl>
-
-                            <FormControl className={classes.formControl}>
-                                <InputLabel htmlFor="select-multiple-checkbox">Artists</InputLabel>
-                                <Select
-                                    multiple
-                                    input={<Input id="select-multiple-checkbox" />}
-                                    renderValue={selected => selected.join(',')}
-                                    value={artists}
-                                    onChange={artistSelectHandler}
-                                >
-                                    {artistsList.map(artist => (
-                                        <MenuItem key={artist.id} value={artist.first_name + " " + artist.last_name}>
-                                            <Checkbox checked={artists.indexOf(artist.first_name + " " + artist.last_name) > -1} />
-                                            <ListItemText primary={artist.first_name + " " + artist.last_name} />
-                                        </MenuItem>
-                                    ))}
-                                </Select>
-                            </FormControl>
-
-                            <FormControl className={classes.formControl}>
-                                <TextField
-                                    id="releaseDateStart"
-                                    label="Release Date Start"
-                                    type="date"
-                                    defaultValue=""
-                                    InputLabelProps={{ shrink: true }}
-                                    onChange={releaseDateStartHandler}
-                                />
-                            </FormControl>
-
-                            <FormControl className={classes.formControl}>
-                                <TextField
-                                    id="releaseDateEnd"
-                                    label="Release Date End"
-                                    type="date"
-                                    defaultValue=""
-                                    InputLabelProps={{ shrink: true }}
-                                    onChange={releaseDateEndHandler}
-                                />
-                            </FormControl>
-                            <br /><br />
-                            <FormControl className={classes.formControl}>
-                                <Button onClick={() => createQuery()} variant="contained" color="primary">
+                                <Button onClick={() => moviesFilterHandler()} variant="contained" color="primary">
                                     APPLY
                                 </Button>
                             </FormControl>
@@ -307,8 +225,9 @@ const Home = (props) => {
                     </Card>
                 </div>
             </div>
-        </div>
+        </div >
     )
 }
+
 
 export default withStyles(styles)(Home);
