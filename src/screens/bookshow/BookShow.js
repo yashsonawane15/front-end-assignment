@@ -25,14 +25,14 @@ const BookShow = (props) => {
   const [showDate, setShowDate] = useState("");
   const [unitPrice, setUnitPrice] = useState(500);
   const [availableTickets, setAvailableTickets] = useState(20);
-  const [reqLocation, setReqLocation] = useState("dispNone");
+  const [requiredLocation, setRequiredLocation] = useState("dispNone");
   const [showDates, setShowDates] = useState([]);
   const [originalShows, setOriginalShows] = useState([]);
   const [languages, setLanguages] = useState([]);
-  const [reqTheatre, setReqTheatre] = useState("dispNone");
-  const [reqLanguage, setReqLanguage] = useState("dispNone");
-  const [reqShowDate, setReqShowDate] = useState("dispNone");
-  const [reqTickets, setReqTickets] = useState("dispNone");
+  const [requiredTheatre, setRequiredTheatre] = useState("dispNone");
+  const [requiredShowDate, setRequiredShowDate] = useState("dispNone");
+  const [requiredTickets, setRequiredTickets] = useState("dispNone");
+  const [requiredLanguage, setRequiredLanguage] = useState("dispNone");
   const [locations, setLocations] = useState([]);
   const [theatres, setTheatres] = useState([]);
   const [showId, setShowId] = useState("");
@@ -147,11 +147,11 @@ const BookShow = (props) => {
 
 
   const bookShowHandler = () => {
-    location === "" ? setReqLocation("dispBlock") : setReqLocation("dispNone");
-    theatre === "" ? setReqTheatre("dispBlock") : setReqTheatre("dispNone");
-    language === "" ? setReqLanguage("dispBlock") : setReqLanguage("dispNone");
-    showDate === "" ? setReqShowDate("dispBlock") : setReqShowDate("dispNone");
-    tickets === 0 ? setReqTickets("dispBlock") : setReqTickets("dispNone");
+    location === "" ? setRequiredLocation("dispBlock") : setRequiredLocation("dispNone");
+    theatre === "" ? setRequiredTheatre("dispBlock") : setRequiredTheatre("dispNone");
+    language === "" ? setRequiredLanguage("dispBlock") : setRequiredLanguage("dispNone");
+    showDate === "" ? setRequiredShowDate("dispBlock") : setRequiredShowDate("dispNone");
+    tickets === 0 ? setRequiredTickets("dispBlock") : setRequiredTickets("dispNone");
 
     if (location === "" || theatre === "" || language === "" || showDate === "" || tickets === 0) {
       return;
@@ -167,11 +167,11 @@ const BookShow = (props) => {
         tickets,
         unitPrice,
         availableTickets,
-        reqLocation,
-        reqTheatre,
-        reqLanguage,
-        reqShowDate,
-        reqTickets,
+        requiredLocation,
+        requiredTheatre,
+        requiredLanguage,
+        requiredShowDate,
+        requiredTickets,
         locations,
         languages,
         theatres,
@@ -204,13 +204,15 @@ const BookShow = (props) => {
             <FormControl required className="formControl">
               <InputLabel htmlFor="location">Choose Location:</InputLabel>
               <Select value={location} onChange={locationChangeHandler}>
-                {locations.map((loc) => (
-                  <MenuItem key={"loc" + loc.id} value={loc.location}>
-                    {loc.location}
-                  </MenuItem>
-                ))}
+                {
+                  locations.map((loc) => (
+                    <MenuItem key={"loc" + loc.id} value={loc.location}>
+                      {loc.location}
+                    </MenuItem>
+                  ))
+                }
               </Select>
-              <FormHelperText className={reqLocation}>
+              <FormHelperText className={requiredLocation}>
                 <span className="red">Required</span>
               </FormHelperText>
             </FormControl>
@@ -225,7 +227,7 @@ const BookShow = (props) => {
                   </MenuItem>
                 ))}
               </Select>
-              <FormHelperText className={reqTheatre}>
+              <FormHelperText className={requiredTheatre}>
                 <span className="red">Required</span>
               </FormHelperText>
             </FormControl>
@@ -234,28 +236,32 @@ const BookShow = (props) => {
             <FormControl required className="formControl">
               <InputLabel htmlFor="language">Choose Language:</InputLabel>
               <Select value={language} onChange={languageChangeHandler}>
-                {languages.map((lang) => (
-                  <MenuItem key={"lang" + lang.id} value={lang.language}>
-                    {lang.language}
-                  </MenuItem>
-                ))}
+                {
+                  languages.map((lang) => (
+                    <MenuItem key={"lang" + lang.id} value={lang.language}>
+                      {lang.language}
+                    </MenuItem>
+                  ))
+                }
               </Select>
-              <FormHelperText className={reqLanguage}>
+              <FormHelperText className={requiredLanguage}>
                 <span className="red">Required</span>
               </FormHelperText>
             </FormControl>
             <br />
             <br />
-            <FormControl required className="formControl">
+            <FormControl required className="formControl"> 
               <InputLabel htmlFor="showDate">Choose Show Date:</InputLabel>
               <Select value={showDate} onChange={showDateChangeHandler}>
-                {showDates.map((sd) => (
-                  <MenuItem key={"showDate" + sd.id} value={sd.showDate}>
-                    {sd.showDate}
-                  </MenuItem>
-                ))}
+                {
+                  showDates.map((sd) => (
+                    <MenuItem key={"showDate" + sd.id} value={sd.showDate}>
+                      {sd.showDate}
+                    </MenuItem>
+                  ))
+                }
               </Select>
-              <FormHelperText className={reqShowDate}>
+              <FormHelperText className={requiredShowDate}>
                 <span className="red">Required</span>
               </FormHelperText>
             </FormControl>
@@ -265,12 +271,8 @@ const BookShow = (props) => {
               <InputLabel htmlFor="tickets">
                 Seat Selection: ( {availableTickets} available )
               </InputLabel>
-              <Input
-                id="tickets"
-                value={tickets !== 0 ? tickets : ""}
-                onChange={ticketsChangeHandler}
-              />
-              <FormHelperText className={reqTickets}>
+              <Input id="tickets" value={tickets !== 0 ? tickets : ""} onChange={ticketsChangeHandler} />
+              <FormHelperText className={requiredTickets}>
                 <span className="red">Required</span>
               </FormHelperText>
             </FormControl>
@@ -283,10 +285,7 @@ const BookShow = (props) => {
             </Typography>
             <br />
             <br />
-            <Button
-              variant="contained"
-              onClick={bookShowHandler}
-              color="primary"
+            <Button variant="contained" onClick={bookShowHandler} color="primary"
             >
               BOOK SHOW
             </Button>

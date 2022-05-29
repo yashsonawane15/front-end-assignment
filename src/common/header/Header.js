@@ -246,7 +246,7 @@ const Header = (props) => {
                 {
                     loggedIn && props.showBookShowButton === "true" ?
 
-                    <div className="bookShowBbutton">
+                    <div className="bookShowButton">
                         <Link to={"/bookshow/" + props.id}>
                             <Button variant="contained" color="primary">
                                 Book Show

@@ -35,9 +35,10 @@ const Confirmation = (props) => {
   const [originalTotalPrice, setOriginalTotalPrice] = useState(0);
 
   useEffect(() => {
-    const price =
-      parseInt(props.location.bookingSummary.unitPrice, 10) *
-      parseInt(props.location.bookingSummary.tickets, 10);
+    let ticketPrice = parseInt(props.location.bookingSummary.unitPrice, 10);
+    let numTickets = parseInt(props.location.bookingSummary.tickets, 10);
+    const price = ticketPrice * numTickets;
+
     setTotalPrice(price);
     setOriginalTotalPrice(price);
   }, []);
@@ -49,16 +50,17 @@ const Confirmation = (props) => {
       tickets: [props.location.bookingSummary.tickets.toString()],
     });
 
-    fetch(props.baseUrl + "bookings", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "Cache-Control": "no-cache",
-        Authorization: "Bearer " + sessionStorage.getItem("access-token"),
-      },
-      body: data,
-    })
-      .then((response) => response.json())
+    fetch( 
+      props.baseUrl + "bookings", 
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": "Bearer " + sessionStorage.getItem("access-token"),
+        },
+        body: data,
+      }
+    ).then((response) => response.json())
       .then((data) => {
         setBookingId(data.reference_number);
       });
