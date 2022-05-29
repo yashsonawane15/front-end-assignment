@@ -79,6 +79,16 @@ const Header = (props) => {
         setValue(value);
     }
 
+    
+
+    const inputUsernameChangeHandler = (e) => {
+        setUsername(e.target.value);
+    }
+
+    const inputLoginPasswordChangeHandler = (e) => {
+        setloginPassword(e.target.value)
+    }
+
     const loginClickHandler = () => {
         username === "" ? setUsernameRequired("dispBlock") : setUsernameRequired("dispNone");
         loginPassword === "" ? setLoginPasswordRequired("dispBlock") : setLoginPasswordRequired("dispNone");
@@ -126,14 +136,6 @@ const Header = (props) => {
             alert('Please enter valid credentials');
         }
 
-    }
-
-    const inputUsernameChangeHandler = (e) => {
-        setUsername(e.target.value);
-    }
-
-    const inputLoginPasswordChangeHandler = (e) => {
-        setloginPassword(e.target.value)
     }
 
     const registerClickHandler = () => {
@@ -213,51 +215,55 @@ const Header = (props) => {
 
     return (
         <div>
-            <header className="header">
-                <img src={logo} className="logo" alt="Movies App Logo" />
-                {
-                    !loggedIn ?
+            <div class="header" className="header">
+                <div className="headerLeftSide">
+                    <img src={logo} className="logo" alt="Movies App Logo" />
+                </div>
 
-                    <div className="authButton">
-                        <Button variant="contained" color="default" onClick={openModalHandler}>
-                            Login
-                        </Button>
-                    </div>
-                    :
-                    <div className="authButton">
-                        <Button variant="contained" color="default" onClick={logoutHandler}>
-                            Logout
-                        </Button>
-                    </div>
-                }
+                <div className="headerRightSide">
+                    {
+                        !loggedIn ?
 
-                {
-                    !loggedIn && props.showBookShowButton === "true" ?
+                        <div className="authButton">
+                            <Button variant="contained" color="default" onClick={openModalHandler}>
+                                Login
+                            </Button>
+                        </div>
+                        :
+                        <div className="authButton">
+                            <Button variant="contained" color="default" onClick={logoutHandler}>
+                                Logout
+                            </Button>
+                        </div>
+                    }
 
-                    <div className="bookShowButton">
-                        <Button variant="contained" color="primary" onClick={guestBookShowHandler}>
-                            Book Show
-                        </Button>
-                    </div>
-                    :
-                    ""
-                }
+                    {
+                        !loggedIn && props.showBookShowButton === "true" ?
 
-                {
-                    loggedIn && props.showBookShowButton === "true" ?
-
-                    <div className="bookShowButton">
-                        <Link to={"/bookshow/" + props.id}>
-                            <Button variant="contained" color="primary">
+                        <div className="bookShowButton">
+                            <Button variant="contained" color="primary" onClick={guestBookShowHandler}>
                                 Book Show
                             </Button>
-                        </Link>
-                    </div>
-                    : 
-                    ""
-                }
+                        </div>
+                        :
+                        ""
+                    }
 
-            </header>
+                    {
+                        loggedIn && props.showBookShowButton === "true" ?
+
+                        <div className="bookShowButton">
+                            <Link to={"/bookshow/" + props.id}>
+                                <Button variant="contained" color="primary">
+                                    Book Show
+                                </Button>
+                            </Link>
+                        </div>
+                        : 
+                        ""
+                    }
+                </div>
+            </div>
 
             {/* Login/Signup component */}
             <Modal
