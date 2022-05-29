@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 
 import './Home.css';
 import Header from '../../common/header/Header';
-import UpcomingMovies from './UpcomingMovies'
+import UpcomingMoviesComponent from './UpcomingMoviesComponent'
 import { withStyles } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
@@ -17,7 +17,7 @@ import ListItemText from '@material-ui/core/ListItemText';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import axios from 'axios';
-import ReleasedMovies from './ReleasedMovies';
+import ReleasedMoviesComponent from './ReleasedMoviesComponent';
 
 const styles = theme => ({
     root: {
@@ -50,6 +50,7 @@ const styles = theme => ({
 });
 
 const Home = (props) => {
+    {/* state declarations */}
     const [movieName, setMovieName] = useState("");
     const [releasedMovies, setReleasedMovies] = useState([]);
     const [genres, setGenres] = useState([]);
@@ -81,25 +82,18 @@ const Home = (props) => {
     }, []);
 
     {/* Form change handlers */}
-    const movieNameChangeHandler = event => {
-        setMovieName(event.target.value);
-    }
-
-    const genreSelectHandler = event => {
+    const genreSelectHandler = (event) => {
         setGenres(event.target.value);
     }
 
-    const artistSelectHandler = event => {
+    const movieNameChangeHandler = (event) => {
+        setMovieName(event.target.value);
+    }
+
+    
+
+    const artistSelectHandler = (event) => {
         setArtists(event.target.value)
-    }
-
-    const releaseDateStartHandler = event => {
-        setReleaseDateStart(event.target.value)
-    }
-
-    const releaseDateEndHandler = event => {
-        setReleaseDateEnd(event.target.value)
-
     }
 
 
@@ -128,17 +122,25 @@ const Home = (props) => {
             });
     }
 
+    const releaseDateStartHandler = (event) => {
+        setReleaseDateStart(event.target.value)
+    }
+
+    const releaseDateEndHandler = (event) => {
+        setReleaseDateEnd(event.target.value)
+    }
+
 
     const { classes } = props;
     return (
         <div>
             <Header baseUrl={props.baseUrl} />
 
-            <UpcomingMovies baseUrl={props.baseUrl} />
+            <UpcomingMoviesComponent baseUrl={props.baseUrl} />
 
             <div className="flex-container">
                 <div className="released">
-                    <ReleasedMovies baseUrl={props.baseUrl} releasedMovies={releasedMovies} />
+                    <ReleasedMoviesComponent baseUrl={props.baseUrl} releasedMovies={releasedMovies} />
                 </div>
                 <div className="filter-component">
                     <Card>
@@ -148,21 +150,17 @@ const Home = (props) => {
                                     FIND MOVIES BY:
                                 </Typography>
                             </FormControl>
-
+                            
+                            {/* Movie name input */}
                             <FormControl className={classes.formControl}>
                                 <InputLabel htmlFor="movieName">Movie Name</InputLabel>
                                 <Input id="movieName" onChange={movieNameChangeHandler} />
                             </FormControl>
 
+                            {/* Genres input */}
                             <FormControl className={classes.formControl}>
                                 <InputLabel htmlFor="select-multiple-checkbox">Genres</InputLabel>
-                                <Select
-                                    multiple
-                                    input={<Input id="select-multiple-checkbox-genre" />}
-                                    renderValue={selected => selected.join(',')}
-                                    value={genres}
-                                    onChange={genreSelectHandler}
-                                >
+                                <Select multiple input={<Input id="select-multiple-checkbox-genre" />} renderValue={selected => selected.join(',')} value={genres} onChange={genreSelectHandler} >
                                     {
                                         genresList.map(genre => (
                                             <MenuItem key={genre.id} value={genre.genre}>
@@ -173,7 +171,8 @@ const Home = (props) => {
                                     }
                                 </Select>
                             </FormControl>
-
+                            
+                            {/* Artists input */}
                             <FormControl className={classes.formControl}>
                                 <InputLabel htmlFor="select-multiple-checkbox">Artists</InputLabel>
                                 <Select
@@ -193,27 +192,15 @@ const Home = (props) => {
                                     }
                                 </Select>
                             </FormControl>
-
+                            
+                            {/* Release date range start input */}
                             <FormControl className={classes.formControl}>
-                                <TextField
-                                    id="releaseDateStart"
-                                    label="Release Date Start"
-                                    type="date"
-                                    defaultValue=""
-                                    InputLabelProps={{ shrink: true }}
-                                    onChange={releaseDateStartHandler}
-                                />
+                                <TextField id="releaseDateStart" label="Release Date Start" type="date" defaultValue="" InputLabelProps={{ shrink: true }} onChange={releaseDateStartHandler} />
                             </FormControl>
-
+                            
+                            {/* Release data range end input */}
                             <FormControl className={classes.formControl}>
-                                <TextField
-                                    id="releaseDateEnd"
-                                    label="Release Date End"
-                                    type="date"
-                                    defaultValue=""
-                                    InputLabelProps={{ shrink: true }}
-                                    onChange={releaseDateEndHandler}
-                                />
+                                <TextField id="releaseDateEnd" label="Release Date End" type="date" defaultValue="" InputLabelProps={{ shrink: true }} onChange={releaseDateEndHandler} />
                             </FormControl>
                             <br /><br />
                             <FormControl className={classes.formControl}>
